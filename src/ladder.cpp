@@ -4,7 +4,13 @@ void error(string word1, string word2, string msg){
 	std::cerr << "HEY YOU! werds" << word1 << word2 << "msg: " << msg << std::endl; 
 }
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-	return (-1 * d <= int(str1.length() - str2.length())) && (int(str1.length() - str2.length()) <= d);
+	if (-1 * d <= int(str1.length() - str2.length())) && (int(str1.length() - str2.length()) <= d){
+		if (word1.length() == word2.length()){
+				return is_adjacent_same_len(word1, word2, d);
+		}
+		return is_adjacent_diff_len(word1, word2, d);
+	}
+	return false;
 }
 /*
 vector<string> all_word_variations(const string& str){
@@ -22,19 +28,19 @@ vector<string> all_word_variations(const string& str){
 	return variations;
 }
 */
-bool is_adjacent_same_len(const string& word1, const string& word2){
+bool is_adjacent_same_len(const string& word1, const string& word2, int d){
 	int differing_chars = 0;
-	for (size_t i = 0; i < word1.length() && differing_chars < 2; ++i){
+	for (size_t i = 0; i < word1.length() && differing_chars <= d; ++i){
 		if (word1[i] != word2[i])
 			++differing_chars;
 	}
-	return differing_chars < 2;
+	return differing_chars <= d;
 }
-bool is_adjacent_diff_len(const string& word1, const string& word2){
+bool is_adjacent_diff_len(const string& word1, const string& word2, int d){
 	string shorter, longer;
 	(word1.length() > word2.length()) ? (longer = word1, shorter = word2) : (longer = word2, shorter = word1);
 	int differing_chars = 0;
-	for (size_t i = 0, j = 0; i < longer.length() && j < shorter.length() && differing_chars < 2;){
+	for (size_t i = 0, j = 0; i < longer.length() && j < shorter.length() && differing_chars <=d;){
 		if (shorter[j] != longer[i]){
 			
 			++differing_chars;
@@ -45,18 +51,11 @@ bool is_adjacent_diff_len(const string& word1, const string& word2){
 			++j;
 		}
 	}
-	return differing_chars < 2;
+	return differing_chars <= d;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
-	if (edit_distance_within(word1, word2, 1)){
-		if (word1.length() == word2.length()){
-			return is_adjacent_same_len(word1, word2);
-		}
-		return is_adjacent_diff_len(word1, word2);
-		}
-	return false;
-
+	return (edit_distance_within(word1, word2, 1));
 }
 string to_lowercase(const string& word){
 	string lc_word = word;
@@ -82,8 +81,11 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 					visited.insert(word);
 					vector<string> new_ladder = ladder;
 					new_ladder.push_back(word);
-					if (word == lc_end_word)
+					if (word == lc_end_word){
+						if (new_ladder.size() == 1)
+							return {};
 						return new_ladder;
+					}
 					ladder_queue.push(new_ladder);
 					cout << "created ladder ";
 					for (const auto& wordString: new_ladder)
@@ -95,7 +97,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 		}
 	} 
 	error(begin_word, end_word, "no ladder found");
-	return {"DANGER DANGER THE WORD LADDER DOESN'T EXIST"};
+	return {"No word ladder found.\n"};
 }
 
 void load_words(set<string> & word_list, const string& file_name){
@@ -109,8 +111,10 @@ void load_words(set<string> & word_list, const string& file_name){
 }
 
 void print_word_ladder(const vector<string>& ladder){
+	cout << "Word ladder found: "
 	for (string word: ladder)
-		cout << word << " \n";
+		cout << word << " ";
+	cout << endl;
 }
 void verify_word_ladder(){
 	
