@@ -4,11 +4,11 @@ void error(string word1, string word2, string msg){
 	std::cerr << "HEY YOU! werds" << word1 << word2 << "msg: " << msg << std::endl; 
 }
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-	if (-1 * d <= int(str1.length() - str2.length())) && (int(str1.length() - str2.length()) <= d){
-		if (word1.length() == word2.length()){
-				return is_adjacent_same_len(word1, word2, d);
+	if (-1 * d <= int(str1.length() - str2.length()) && (int(str1.length() - str2.length()) <= d)){
+		if (str1.length() == str2.length()){
+				return is_adjacent_same_len(str1, str2, d);
 		}
-		return is_adjacent_diff_len(word1, word2, d);
+		return is_adjacent_diff_len(str1, str2, d);
 	}
 	return false;
 }
@@ -111,7 +111,7 @@ void load_words(set<string> & word_list, const string& file_name){
 }
 
 void print_word_ladder(const vector<string>& ladder){
-	cout << "Word ladder found: "
+	cout << "Word ladder found: ";
 	for (string word: ladder)
 		cout << word << " ";
 	cout << endl;
