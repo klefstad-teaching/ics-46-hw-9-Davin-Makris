@@ -71,7 +71,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 	visited.insert(to_lowercase(begin_word));
 	string lc_end_word = to_lowercase(end_word);
 	if (lc_end_word == to_lowercase(begin_word)){
-		return {}
+		return {};
 	}
 	while (!ladder_queue.empty()){
 		vector<string> ladder = ladder_queue.front();
